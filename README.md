@@ -78,14 +78,14 @@ After the transformation function is triggered, each transformation is assigned 
 
 | 変換         | 変換関数確率 (%) | 変換確率 (%) | 合計確率 (%) |
 |------------|--------------|----------|----------|
-| Blurring   |              | 30       | 18       |
-| Perspective |              |          |          |
-| Rotation   |              |          |          |
-| Flipping   | 60           |          |          |
-| Brightness |              |          |          |
-| Contrast   |              |   50       | 30       |
-| Saturation |              |          |          |
-| Gamma      |              |          |          |
+| Blurring   |      60      | 30       | 18       |
+| Perspective |      60      | 30       | 18       |
+| Rotation   |       60      |   50       | 30       |
+| Flipping   |       60      |   50       | 30       |
+| Brightness |       60      |   50       | 30       |
+| Contrast   |       60      |   50       | 30       |
+| Saturation |       60      |   50       | 30       |
+| Gamma      |       60      |   50       | 30       |
 
 This means that 18% of videos after the 5th epoch have the blurring and perspective transformations, whereas 30% of videos have the rotation, flipping, brightness, contrast, saturation and gamma transformations applied.
 
