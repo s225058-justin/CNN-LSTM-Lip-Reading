@@ -52,7 +52,7 @@ The original photo
 
 ![uncropped](https://github.com/user-attachments/assets/9bbd5fed-8642-4b42-99f6-980d53f82158)
 
-The cropped and black and white version used for training
+The cropped black and white version used for training
 
 ![lipsonlybnw](https://github.com/user-attachments/assets/3aa91e21-fa81-405a-a7cf-8b69e3d79972)
 
