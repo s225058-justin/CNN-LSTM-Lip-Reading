@@ -35,9 +35,11 @@ The SSSD dataset comprises of labeled short videos of 25 words, spoken 10 times 
 To reduce the amount of data utilised for training and lower training time, I set the frame limit of each video to 25 frames. To achieve this, videos with more than 25 frames were downsampled to 25 frames, whereas videos with less than 25 frames utilised padding to achieve 25 frames. 
 
 A video with only 17 frames is padded to 25 frames.
+
 ![Padding](https://github.com/user-attachments/assets/22b43625-2adb-4382-a446-e2530b8fa0d7)
 
 A video with 49 frames is downsampled to 25 frames.
+
 ![Sampling](https://github.com/user-attachments/assets/6d458d67-f9aa-4f9e-8eb1-267efc92dc53)
 
 To reduce the amount of redundant information learned during training, I took several steps to lower the amount of data available.
@@ -47,9 +49,11 @@ To reduce the amount of redundant information learned during training, I took se
 These steps lowered the amount of data to a mere 0.18% of the original size, while retaining much of the relevant data required for training a model.
 
 The original photo
+
 ![uncropped](https://github.com/user-attachments/assets/9bbd5fed-8642-4b42-99f6-980d53f82158)
 
 The cropped and black and white version used for training
+
 ![lipsonlybnw](https://github.com/user-attachments/assets/3aa91e21-fa81-405a-a7cf-8b69e3d79972)
 
 After processing the images, I preconverted the videos into tensors, to save time from loading each video when optimising the hyperparameters of the model during training. Hence, during the training, the script would load precompiled tensors, instead of images, saving significant training time.
