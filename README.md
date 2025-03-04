@@ -1,24 +1,23 @@
 # 会話支援のための機械学習を用いた読唇システムの開発
-This repository stores the programs and results from my graduation research at Yonago National Institute of Technology on developing a Japanese Lip-Reading AI System.
-A demo is available and the steps to test it out are available below. 
+このリポジトリは、米子工業高等専門学校における卒業研究として開発した日本語読唇AIシステムのプログラムと結果を保存している。デモも利用可能であり、その手順は以下に記載されている。
 
-## The demo
-This repository contains the code I used for preprocessing and training, in the folders `01_Dataset` and `02_Model`. The demo is contained in `03_Webcam`. In order to run the demo, you must have a webcam. The steps are as follows:
-1) Install the requirements stated in `requirements.txt`
-2) Download the `shape_predictor_68_face_landmarks_GTX.dat` model from [this link](https://drive.google.com/drive/folders/1t1fRQfTaL1-XgGA1JSzuvLSXsitZ6Scj) and place it in the `dlib_shape_predictor` folder in `03_Webcam`.
-3) Run the Webcam_LivePredict.py file using
+## デモ
+このリポジトリには、前処理とトレーニングに使用したコードが含まれており、`01_Dataset`と`02_Model`フォルダに格納されている。デモは`03_Webcam`フォルダに含まれている。デモを実行するためには、ウェブカメラが必要である。手順は以下の通りである。
+1) `requirements.txt`に記載されている必要なライブラリをインストールする。
+2) [このリンク](https://drive.google.com/drive/folders/1t1fRQfTaL1-XgGA1JSzuvLSXsitZ6Scj)から`shape_predictor_68_face_landmarks_GTX.dat`モデルをダウンロードし、`03_Webcam`内の`dlib_shape_predictor`フォルダに配置する。
+3) 以下のコマンドで`Webcam_LivePredict.py`ファイルを実行する。
 ```bash
 python3 Webcam_LivePredict.py
 ```
-4) Wait until the webcam preview loads and choose a word to say. Since audio is not required for recognition, it is fine to mouth it silently.
-5) Press and hold the `Enter` key, say your chosen word and then release the `Enter` key.
-6) Wait for the model to predict the word
+4) ウェブカメラのプレビューが表示されるまで待ち、発話する単語を選択する。音声は認識に不要であるため、無音で発話しても問題ない。
+5) `Enter`キーを押し続け、選択した単語を発話した後に`Enter`キーを離す。
+6) モデルが単語を予測するまで待つ。
 
-## Training the model
-### The dataset
-I utilised the SSSD Dataset provided by Kyushu Institute of Technology's 齊藤・張 研究室, whose website can be found at https://www.saitoh-lab.com/. Due to the confidentiality of the dataset, parts of the code used for training has been deleted and that dataset is not included in this repository to maintain confidentiality. As a result, it is not intended for the training of the model to be reimplemented through this repository.
+## モデルのトレーニング
+### データセット
+九州工業大学の齊藤・張研究室が提供するSSSDデータセットを利用した。同研究室のウェブサイトはhttps://www.saitoh-lab.com/である。データセットの機密性のため、トレーニングに使用したコードの一部は削除されており、データセットもこのリポジトリには含まれていない。そのため、このリポジトリを通じてモデルのトレーニングを再現することは想定されていない。
 
-The SSSD dataset comprises of labeled short videos of 25 words, spoken 10 times by 72 speakers shot at 30fps with no audiotrack. The images are cropped to focus around the mouths of the participants. The 25 words are as follows:
+SSSDデータセットは、25の単語を72人の話者が10回ずつ発話した短い動画で構成されており、30fpsで撮影され、音声トラックは含まれていない。画像は参加者の口元に焦点を当てて切り取られている。25の単語は以下の通りである。
 
 | #  | 発話内容   | #  | 発話内容       | #  | 発話内容       |
 |----|----------|----|--------------|----|--------------|
@@ -33,37 +32,37 @@ The SSSD dataset comprises of labeled short videos of 25 words, spoken 10 times 
 | 8  | はち      | 18 | さようなら     |    |              |
 | 9  | きゅう    | 19 | すみません     |    |              |
 
-### Preprocessing
-To reduce the amount of data utilised for training and lower training time, I set the frame limit of each video to 25 frames. To achieve this, videos with more than 25 frames were downsampled to 25 frames, whereas videos with less than 25 frames utilised padding to achieve 25 frames. 
+### 前処理
+トレーニングに使用するデータ量を削減し、トレーニング時間を短縮するため、各動画のフレーム数を25フレームに制限した。これを実現するため、25フレームを超える動画はダウンサンプリングされ、25フレーム未満の動画はパディングを行って25フレームに調整した。
 
-A video with only 17 frames is padded to 25 frames.
+17フレームしかない動画は25フレームにパディングされる。
 
 ![Padding](https://github.com/user-attachments/assets/22b43625-2adb-4382-a446-e2530b8fa0d7)
 
-A video with 49 frames is downsampled to 25 frames.
+49フレームの動画は25フレームにダウンサンプリングされる。
 
 ![Sampling](https://github.com/user-attachments/assets/6d458d67-f9aa-4f9e-8eb1-267efc92dc53)
 
-To reduce the amount of redundant information learned during training, I took several steps to lower the amount of data available.
-1) First, I converted the images to monochrome
-2) I cropped out the lips of each participants and removed any facial and background details
-3) I resized the images from 300px X 300px to 32px X 32px.
-These steps lowered the amount of data to a mere 0.18% of the original size, while retaining much of the relevant data required for training a model.
+トレーニング中に冗長な情報が学習されるのを防ぐため、以下の手順でデータ量を削減した。
+1) まず、画像をモノクロに変換した。
+2) 各参加者の唇の部分を切り取り、顔や背景の詳細を除去した。
+3)画像を300px × 300pxから32px × 32pxにリサイズした。
+これらの手順により、データ量は元のサイズのわずか0.18%に削減されながらも、トレーニングに必要な関連データの大部分が保持された。
 
-The original photo
+元の画像
 
 ![uncropped](https://github.com/user-attachments/assets/9bbd5fed-8642-4b42-99f6-980d53f82158)
 
-The cropped black and white version used for training
+トレーニングに使用した切り取られた白黒画像
 
 ![lipsonlybnw](https://github.com/user-attachments/assets/3aa91e21-fa81-405a-a7cf-8b69e3d79972)
 
-After processing the images, I preconverted the videos into tensors, to save time from loading each video when optimising the hyperparameters of the model during training. Hence, during the training, the script would load precompiled tensors, instead of images, saving significant training time.
+画像の処理後、動画をテンソルに事前変換し、トレーニング中のモデルのハイパーパラメータ最適化時に各動画をロードする時間を節約した。これにより、トレーニング中は画像ではなく事前コンパイルされたテンソルをロードするため、大幅な時間短縮が実現された。
 
-I also experimented with other picture sizes, color and preprocessing effects, but the black and white lips were my final choice. Please consult the full paper if interested.
+他の画像サイズやカラー、前処理効果も実験したが、最終的には白黒の唇画像を選択した。詳細については、論文を参照されたい。
 
-### Synthetic data
-To increase the robustness of my data, I also implemented synthetic data generation. I allowed the model to learn on unmodified data for the first 5 epochs, and then enabled a transformation function with a 60% chance to modify the videos. The transformations that could then affect the videos were as follows:
+### 合成データ
+データの堅牢性を高めるため、合成データ生成も実装した。最初の5エポックでは、モデルに未修正のデータを学習させ、その後、60%の確率で動画を修正する変換関数を有効にした。動画に適用される変換は以下の通りである。
 
 1. Blurring : 動画にランダムな強さでモザイク処理
 2. Flipping : 動画を水平に反転
@@ -74,7 +73,7 @@ To increase the robustness of my data, I also implemented synthetic data generat
 7. Saturation : 動画の鮮やかさを ±25%以内に変換
 8. Gamma : 動画のガンマを ±25%以内に変換
 
-After the transformation function is triggered, each transformation is assigned their own probability of triggering, meaning that multiple types of transformations can occur on the same video. This significantly increased the variety of data available for training by varying the types of transformations a video could be modified with. The table of probabilities for each transformation is listed below.
+変換関数がトリガーされると、各変換はそれぞれの確率で適用されるため、同じ動画に複数の変換が適用されることがある。これにより、トレーニングデータの多様性が大幅に増加した。各変換の確率は以下の表に示されている。
 
 | 変換         | 変換関数確率 (%) | 変換確率 (%) | 合計確率 (%) |
 |------------|--------------|----------|----------|
@@ -87,22 +86,29 @@ After the transformation function is triggered, each transformation is assigned 
 | Saturation |       60      |   50       | 30       |
 | Gamma      |       60      |   50       | 30       |
 
-This means that 18% of videos after the 5th epoch have the blurring and perspective transformations, whereas 30% of videos have the rotation, flipping, brightness, contrast, saturation and gamma transformations applied.
+これにより、5エポック以降の動画の18%にぼかしと遠近法の変換が適用され、30%の動画に回転、反転、明るさ、コントラスト、彩度、ガンマの変換が適用される。
 
-### The model
-I selected a CNN-LSTM architecture, where the CNN extracts spatial features from frames, while the LSTM captures temporal patterns in the videos. Dropout layers were also strategically used in the CNN architecture to reduce overfitting. The architecture of the model is as follows:
+### モデル
+CNN-LSTMアーキテクチャを選択した。CNNはフレームから空間的特徴を抽出し、LSTMは動画の時間的パターンを捕捉する。また、CNNアーキテクチャには過学習を防ぐためにドロップアウト層が戦略的に使用された。モデルのアーキテクチャは以下の通りである。
 
 ![CNN_LSTM-model](https://github.com/user-attachments/assets/b05807a6-3214-4cb1-b8f4-aa44d74218ce)
 
-The model was then trained for 50 epochs with a 83:17 split for training and validation.
+モデルは50エポックにわたってトレーニングされ、トレーニングと検証のデータ分割は83:17である。
 
-### The results
-After training for 50 epochs, the model achieved an accuracy of around 80%. Increasing the epoch count did not increase accuracy but caused the model to overfit instead. The picture below describes the results of training the model. In the occurence tab, it shows the number of times each word was predicted and an ideal result would be all words predicted 120 times as in validation there are 12 speakers.
+### 結果
+
+50エポックのトレーニング後、モデルの精度は約80%に達した。エポック数を増やしても精度は向上せず、過学習が発生した。以下の画像はモデルのトレーニング結果を示している。検証データには12人の話者が含まれており、理想的にはすべての単語が120回予測されるべきである。
 
 ![Results](https://github.com/user-attachments/assets/5a49fcae-44f6-4696-a6ec-1679ddf3df4c)
 
-I further validated my findings by creating a demo version of my model and gathered video data from 10 students to test my model. Each student would record themselves saying each word 10 times for a total of 250 videos per student. The videos were then preprocessed the same way as the training data and then fed into the model using weights saved from the training. As a result, the total accuracy was 70.64% and I discovered that shorter words were harder for the system to read than longer words. In particular, the word ゴ had the least true positives and the word イチ had the most false positives. Longer words like さようなら、はじめまして and こんばんは had lowest occurences of false positives and a good ratio of true positives. The results are as below:
+さらに、モデルのデモ版を作成し、10人の学生から動画データを収集してモデルをテストした。各学生は各単語を10回ずつ発話し、学生ごとに合計250の動画を記録した。動画はトレーニングデータと同様に前処理され、トレーニングから保存された重みを使用してモデルに入力された。その結果、全体の精度は70.64%であり、短い単語ほどシステムが読み取りにくいことが判明した。特に、「ゴ」が最も真陽性が少なく、「イチ」が最も偽陽性が多かった。一方、「さようなら」「はじめまして」「こんばんは」などの長い単語は、偽陽性が最も少なく、真陽性の比率も良好であった。結果は以下の通りである。
 
 ![total_results1](https://github.com/user-attachments/assets/40e2145c-10ba-43d3-b658-ad90da92bc13)
 
-Furthermore, of the 10 students, 7 were native Japanese students while 3 were foreign students. I discovered that Japanese students had an accuracy of 74% whereas foreign students had an accuracy of 63%. An assumption I have is that since the model was trained on data from native Japanese speakers, the foreign students had a lower accuracy as they did not necessarily pronounce words the way an average Japanese speaker would. However, I did not test this assumption for robustness and it remains an assumption.
+さらに、10人の学生のうち、7人は日本語ネイティブスピーカーであり、3人は外国人学生であった。日本語ネイティブの学生の精度は74%であったのに対し、外国人学生の精度は63%であった。これは、モデルが日本語ネイティブスピーカーのデータでトレーニングされたため、外国人学生が必ずしも平均的な日本語話者と同じように単語を発音しないことが原因であると推測される。ただし、この仮説は検証されておらず、あくまで仮説である。
+
+### 振り返り
+
+このプロジェクトは、Pythonと機械学習に関する知識がゼロの状態から始め、指導教員の助言、教科書、オンライン記事、大規模言語モデル（LLM）を通じてPythonと機械学習の基礎、概念、ベストプラクティスを重点的に学んだ。しかし、この基礎学習に重点を置いたため、既存の研究を調査したり、ResNet50のような既知の事前学習済みモデルや、TransformerやAttentionメカニズムのような新興技術を活用して、より効率的で正確なモデルを作成するための時間が不足した。
+
+今後は、最先端のアーキテクチャや事前学習済みモデル、高度な技術を組み込むことで、システムの性能と適応性を向上させたい。また、既存の研究をより詳細に調査し、革新的なアプローチを統合することを目指す。
