@@ -3,13 +3,15 @@ This repository stores the programs and results from my graduation research at Y
 A demo is available and the steps to test it out are available below. 
 
 ## The demo
-This repository contains the code I used for preprocessing and training, in the folders 01_Dataset and 02_Model. The demo is contained in 03_Webcam. In order to run the demo, you must have a webcam. The steps are as follows:
-1) Install the requirements stated in requirements.txt
-2) Download the shape_predictor_68_face_landmarks_GTX.dat model from https://drive.google.com/drive/folders/1t1fRQfTaL1-XgGA1JSzuvLSXsitZ6Scj and place it in the dlib_shape_predictor folder in 03_Webcam.
+This repository contains the code I used for preprocessing and training, in the folders `01_Dataset` and `02_Model`. The demo is contained in `03_Webcam`. In order to run the demo, you must have a webcam. The steps are as follows:
+1) Install the requirements stated in `requirements.txt`
+2) Download the `shape_predictor_68_face_landmarks_GTX.dat` model from [this link](https://drive.google.com/drive/folders/1t1fRQfTaL1-XgGA1JSzuvLSXsitZ6Scj) and place it in the `dlib_shape_predictor` folder in `03_Webcam`.
 3) Run the Webcam_LivePredict.py file using
+```bash
 python3 Webcam_LivePredict.py
+```
 4) Wait until the webcam preview loads and choose a word to say. Since audio is not required for recognition, it is fine to mouth it silently.
-5) Press and hold the "Enter" key, say your chosen word and release the "Enter" key.
+5) Press and hold the `Enter` key, say your chosen word and then release the `Enter` key.
 6) Wait for the model to predict the word
 
 ## Training the model
@@ -103,4 +105,4 @@ I further validated my findings by creating a demo version of my model and gathe
 
 ![total_results1](https://github.com/user-attachments/assets/40e2145c-10ba-43d3-b658-ad90da92bc13)
 
-Furthermore, of the 10 students, 7 were native japanese students while 3 were foreign students. I discovered that Japanese students had an accuracy of 74% whereas foreign students had an accuracy of 63%. An assumption I have is that since the model was trained on data from native Japanese speakers, the foreign students had a lower accuracy as they did not necessarily pronounce words the way an average Japanese speaker would. However, I did not test this assumption for robustness and it remains an assumption.
+Furthermore, of the 10 students, 7 were native Japanese students while 3 were foreign students. I discovered that Japanese students had an accuracy of 74% whereas foreign students had an accuracy of 63%. An assumption I have is that since the model was trained on data from native Japanese speakers, the foreign students had a lower accuracy as they did not necessarily pronounce words the way an average Japanese speaker would. However, I did not test this assumption for robustness and it remains an assumption.
