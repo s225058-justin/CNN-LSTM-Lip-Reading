@@ -59,7 +59,7 @@ The cropped black and white version used for training
 
 After processing the images, I preconverted the videos into tensors, to save time from loading each video when optimising the hyperparameters of the model during training. Hence, during the training, the script would load precompiled tensors, instead of images, saving significant training time.
 
-I also experimented with other picture sizes, color and preprocessing effects, but the black and white lips were my final choice. Please consult the full paper if interested.
+I also experimented with other picture sizes, color and preprocessing effects, but the black and white lips were my final choice. To keep the README brief, the results of the other experiment have been omitted.
 
 ### Synthetic data
 To increase the robustness of my data, I also implemented synthetic data generation. I allowed the model to learn on unmodified data for the first 5 epochs, and then enabled a transformation function with a 60% chance to modify the videos. The transformations that could then affect the videos were as follows:
